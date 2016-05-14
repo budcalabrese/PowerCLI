@@ -1,16 +1,14 @@
-#Creates Virtual Machine from a CSV
-#CSV needs Name, Template, DestinationHost, CustomSpec, NumCpu, MemoryMB
-
-#Declaring variables to connect to vCenter
-$vCenter_Server = "192.168.1.18"
+######Creates Virtual Machine from a CSV######
 
 #Establishing connection to vCenter
-Connect-VIServer -Server $vCenter_Server
+Connect-VIServer VCENTER-01.V-Blog.local
 
 #Imports variables from CSV for VM creation
-#CSV must include Name, Template, DestinationHost, CustomSpec, NumCpu, MemoryMB
+#CSV needs Name, Template, DestinationHost, Datastore, CustomSpec, NumCpu, MemoryMB
 
 $VirtualMachineCSV = "C:\temp\VMTemplate.csv"
+
+#Uses the variables from the CSV to create the Virtual Machines
 
 $VirtualMachine = Import-CSV $VirtualMachineCSV
 $VirtualMachine | %{ New-VM -Name $_.Name -Template $(Get-Template  $_.Template) -VMHost $(Get-VMHost $_.DestinationHost) -Datastore$(Get-Datastore $_.Datastore) -OSCustomizationSpec $(Get-OSCustomizationSpec $_.CustomSpec) }
