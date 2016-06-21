@@ -17,7 +17,7 @@ Connect-VIServer $VIServer -Credential (Get-Credential) | Out-Null
       @{N='Host';E={$vm.VMHost.Name}}, 
       @{N='OS';E={$vm.Guest.OSFullName}}, 
       @{N='Tools';E={$vm.ExtensionData.Guest.ToolsRunningStatus}}, 
-     @{N='NicType';E={[string]::Join(',',(Get-NetworkAdapter -Vm $vm | Select-Object -ExpandProperty Type))}}, 
+      @{N='NicType';E={[string]::Join(',',(Get-NetworkAdapter -Vm $vm | Select-Object -ExpandProperty Type))}}, 
       @{N='VLAN';E={[string]::Join(',',(Get-NetworkAdapter -Vm $vm | Select-Object -ExpandProperty NetworkName))}}, 
       @{N='IP';E={[string]::Join(',',($vm.Guest.IPAddress | Where {($_.Split(".")).length -eq 4}))}}, 
       @{N='Gateway';E={[string]::Join(',',(
@@ -35,7 +35,9 @@ Connect-VIServer $VIServer -Credential (Get-Credential) | Out-Null
                 [String]::Join('.', $DottedIP)  
             }}, 
       @{N="DNS";E={[string]::Join(',',($vm.ExtensionData.Guest.IpStack.DnsConfig.IpAddress))}}, 
-     @{N='MAC';E={[string]::Join(',',$_.MacAddress)}} 
-}} | Export-Csv -NoTypeInformation -Path "C:\temp\NetworkInfo.csv" -UseCulture 
+      @{N='MAC';E={[string]::Join(',',$_.MacAddress)}} 
+}} 
+
+| Export-Csv -NoTypeInformation -Path "C:\temp\NetworkInfo.csv" -UseCulture 
 
 
